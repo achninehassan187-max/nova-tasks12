@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOVA GMAIL - منصة المهام الدقيقة</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      direction: rtl;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .btn-copy {
+      transition: all 0.3s ease;
+    }
+    .btn-copy:hover {
+      background-color: #22c55e;
+      transform: scale(1.05);
+    }
+    .dark-mode {
+      background-color: #0f172a;
+      color: #e2e8f0;
+    }
+    .light-mode {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body class="dark-mode transition-all">
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-white">
+        <i class="fas fa-envelope-open-text"></i> NOVA GMAIL
+      </h1>
+      <div class="flex gap-4">
+        <button id="themeToggle" class="bg-gray-700 hover:bg-gray-600 p-2 rounded-lg transition">
+          <i class="fas fa-moon"></i>
+        </button>
+        <select id="languageSelect" class="bg-gray-700 hover:bg-gray-600 p-2 rounded-lg">
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+          <option value="ru">Русский</option>
+        </select>
+        <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white transition">
+          <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mx-auto p-6">
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <!-- Balance Card -->
+      <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-lg shadow-lg text-white">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-sm opacity-90">الرصيد الأساسي</p>
+            <h2 class="text-3xl font-bold" id="mainBalance">$0.00</h2>
+          </div>
+          <i class="fas fa-wallet text-4xl opacity-50"></i>
+        </div>
+      </div>
+
+      <!-- Escrow Balance Card -->
+      <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-lg shadow-lg text-white">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-sm opacity-90">رصيد الحجز</p>
+            <h2 class="text-3xl font-bold" id="escrowBalance">$0.00</h2>
+          </div>
+          <i class="fas fa-lock text-4xl opacity-50"></i>
+        </div>
+      </div>
+
+      <!-- Completed Tasks -->
+      <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-lg shadow-lg text-white">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-sm opacity-90">المهام المكتملة</p>
+            <h2 class="text-3xl font-bold" id="completedTasks">0</h2>
+          </div>
+          <i class="fas fa-tasks text-4xl opacity-50"></i>
+        </div>
+      </div>
+
+      <!-- Referrals -->
+      <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-lg shadow-lg text-white">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-sm opacity-90">عدد الإحالات</p>
+            <h2 class="text-3xl font-bold" id="referralCount">0</h2>
+          </div>
+          <i class="fas fa-share-alt text-4xl opacity-50"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Tabs -->
+    <div class="flex gap-4 mb-6 overflow-x-auto">
+      <button class="tab-btn active px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold" data-tab="gmail">
+        <i class="fas fa-envelope"></i> مهام Gmail
+      </button>
+      <button class="tab-btn px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600" data-tab="shortlink">
+        <i class="fas fa-link"></i> الروابط المختصرة
+      </button>
+      <button class="tab-btn px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600" data-tab="special">
+        <i class="fas fa-star"></i> مهام خاصة
+      </button>
+      <button class="tab-btn px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600" data-tab="withdrawals">
+        <i class="fas fa-dollar-sign"></i> السحب
+      </button>
+    </div>
+
+    <!-- Gmail Tasks Tab -->
+    <div id="gmail-tab" class="tab-content">
+      <div class="bg-gray-800 rounded-lg p-6 mb-6">
+        <h3 class="text-2xl font-bold text-white mb-6">📧 مهام حسابات Gmail المتاحة</h3>
+        <div id="gmailTasksContainer" class="grid gap-4">
+          <!-- Gmail tasks will be loaded here -->
+          <div class="bg-gray-700 p-4 rounded-lg text-center text-gray-300">
+            جاري تحميل المهام...
+          </div>
+        </div>
+      </div>
+
+      <!-- My Bookings Section -->
+      <div class="bg-gray-800 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-white mb-6">📋 محجوزاتي</h3>
+        <div id="bookingsContainer" class="grid gap-4">
+          <div class="bg-gray-700 p-4 rounded-lg text-center text-gray-300">
+            لا توجد محجوزات حالياً
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shortlink Tasks Tab -->
+    <div id="shortlink-tab" class="tab-content hidden">
+      <div class="bg-gray-800 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-white mb-6">🔗 مهام الروابط المختصرة</h3>
+        <div id="shortlinkTasksContainer" class="grid gap-4">
+          <div class="bg-gray-700 p-4 rounded-lg text-center text-gray-300">
+            جاري تحميل المهام...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Special Tasks Tab -->
+    <div id="special-tab" class="tab-content hidden">
+      <div class="bg-gray-800 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-white mb-6">⭐ المهام الخاصة</h3>
+        <div id="specialTasksContainer" class="grid gap-4">
+          <div class="bg-gray-700 p-4 rounded-lg text-center text-gray-300">
+            جاري تحميل المهام...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Withdrawals Tab -->
+    <div id="withdrawals-tab" class="tab-content hidden">
+      <div class="bg-gray-800 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-white mb-6">💵 طلب سحب أموال</h3>
+        <form id="withdrawalForm" class="space-y-4">
+          <div>
+            <label class="block text-white font-semibold mb-2">المبلغ (الحد الأدنى: $0.45)</label>
+            <input type="number" id="withdrawAmount" min="0.45" step="0.01" class="w-full bg-gray-700 text-white p-3 rounded-lg" placeholder="أدخل المبلغ" required />
+          </div>
+          <div>
+            <label class="block text-white font-semibold mb-2">طريقة السحب</label>
+            <select id="withdrawMethod" class="w-full bg-gray-700 text-white p-3 rounded-lg" required>
+              <option value="">اختر طريقة</option>
+              <option value="usdt">🪙 USDT BEP20</option>
+              <option value="novabot">🤖 Nova Bot Balance</option>
+              <option value="stars">⭐ نجوم تليجرام</option>
+            </select>
+          </div>
+          <div id="methodDetails"></div>
+          <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">
+            طلب السحب
+          </button>
+        </form>
+
+        <!-- Withdrawal History -->
+        <div class="mt-8">
+          <h4 class="text-xl font-bold text-white mb-4">📊 سجل السحب</h4>
+          <div id="withdrawalHistory" class="space-y-3">
+            <div class="bg-gray-700 p-3 rounded-lg text-center text-gray-300">
+              لا توجد عمليات سحب
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Buttons -->
+  <div class="fixed bottom-6 right-6 space-y-3">
+    <button id="referralBtn" class="bg-purple-600 hover:bg-purple-700 w-14 h-14 rounded-full text-white shadow-lg flex items-center justify-center transition transform hover:scale-110">
+      <i class="fas fa-share-alt text-xl"></i>
+    </button>
+    <button id="settingsBtn" class="bg-blue-600 hover:bg-blue-700 w-14 h-14 rounded-full text-white shadow-lg flex items-center justify-center transition transform hover:scale-110">
+      <i class="fas fa-cog text-xl"></i>
+    </button>
+  </div>
+
+  <!-- Script -->
+  <script src="../public/app.js"></script>
+</body>
+</html>
