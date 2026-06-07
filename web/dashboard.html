@@ -13,13 +13,6 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .btn-copy {
-      transition: all 0.3s ease;
-    }
-    .btn-copy:hover {
-      background-color: #22c55e;
-      transform: scale(1.05);
-    }
     .dark-mode {
       background-color: #0f172a;
       color: #e2e8f0;
@@ -56,7 +49,6 @@
   <div class="container mx-auto p-6">
     <!-- Dashboard Grid -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-      <!-- Balance Card -->
       <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-lg shadow-lg text-white">
         <div class="flex justify-between items-center">
           <div>
@@ -67,7 +59,6 @@
         </div>
       </div>
 
-      <!-- Escrow Balance Card -->
       <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-lg shadow-lg text-white">
         <div class="flex justify-between items-center">
           <div>
@@ -78,7 +69,6 @@
         </div>
       </div>
 
-      <!-- Completed Tasks -->
       <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-lg shadow-lg text-white">
         <div class="flex justify-between items-center">
           <div>
@@ -89,7 +79,6 @@
         </div>
       </div>
 
-      <!-- Referrals -->
       <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-lg shadow-lg text-white">
         <div class="flex justify-between items-center">
           <div>
@@ -101,13 +90,13 @@
       </div>
     </div>
 
-    <!-- Main Content Tabs -->
+    <!-- Tabs -->
     <div class="flex gap-4 mb-6 overflow-x-auto">
       <button class="tab-btn active px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold" data-tab="gmail">
         <i class="fas fa-envelope"></i> مهام Gmail
       </button>
       <button class="tab-btn px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600" data-tab="shortlink">
-        <i class="fas fa-link"></i> الروابط المختصرة
+        <i class="fas fa-link"></i> الروابط
       </button>
       <button class="tab-btn px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600" data-tab="special">
         <i class="fas fa-star"></i> مهام خاصة
@@ -117,101 +106,45 @@
       </button>
     </div>
 
-    <!-- Gmail Tasks Tab -->
+    <!-- Gmail Tab -->
     <div id="gmail-tab" class="tab-content">
-      <div class="bg-gray-800 rounded-lg p-6 mb-6">
-        <h3 class="text-2xl font-bold text-white mb-6">📧 مهام حسابات Gmail المتاحة</h3>
-        <div id="gmailTasksContainer" class="grid gap-4">
-          <!-- Gmail tasks will be loaded here -->
-          <div class="bg-gray-700 p-4 rounded-lg text-center text-gray-300">
-            جاري تحميل المهام...
-          </div>
-        </div>
-      </div>
-
-      <!-- My Bookings Section -->
-      <div class="bg-gray-800 rounded-lg p-6">
-        <h3 class="text-2xl font-bold text-white mb-6">📋 محجوزاتي</h3>
-        <div id="bookingsContainer" class="grid gap-4">
-          <div class="bg-gray-700 p-4 rounded-lg text-center text-gray-300">
-            لا توجد محجوزات حالياً
-          </div>
-        </div>
+      <div class="bg-gray-800 rounded-lg p-6" id="gmailTasksContainer">
+        جاري تحميل المهام...
       </div>
     </div>
 
-    <!-- Shortlink Tasks Tab -->
+    <!-- Shortlink Tab -->
     <div id="shortlink-tab" class="tab-content hidden">
-      <div class="bg-gray-800 rounded-lg p-6">
-        <h3 class="text-2xl font-bold text-white mb-6">🔗 مهام الروابط المختصرة</h3>
-        <div id="shortlinkTasksContainer" class="grid gap-4">
-          <div class="bg-gray-700 p-4 rounded-lg text-center text-gray-300">
-            جاري تحميل المهام...
-          </div>
-        </div>
+      <div class="bg-gray-800 rounded-lg p-6" id="shortlinkTasksContainer">
+        جاري تحميل المهام...
       </div>
     </div>
 
-    <!-- Special Tasks Tab -->
+    <!-- Special Tab -->
     <div id="special-tab" class="tab-content hidden">
-      <div class="bg-gray-800 rounded-lg p-6">
-        <h3 class="text-2xl font-bold text-white mb-6">⭐ المهام الخاصة</h3>
-        <div id="specialTasksContainer" class="grid gap-4">
-          <div class="bg-gray-700 p-4 rounded-lg text-center text-gray-300">
-            جاري تحميل المهام...
-          </div>
-        </div>
+      <div class="bg-gray-800 rounded-lg p-6" id="specialTasksContainer">
+        جاري تحميل المهام...
       </div>
     </div>
 
     <!-- Withdrawals Tab -->
     <div id="withdrawals-tab" class="tab-content hidden">
       <div class="bg-gray-800 rounded-lg p-6">
-        <h3 class="text-2xl font-bold text-white mb-6">💵 طلب سحب أموال</h3>
+        <h3 class="text-xl font-bold text-white mb-4">💵 طلب سحب</h3>
         <form id="withdrawalForm" class="space-y-4">
-          <div>
-            <label class="block text-white font-semibold mb-2">المبلغ (الحد الأدنى: $0.45)</label>
-            <input type="number" id="withdrawAmount" min="0.45" step="0.01" class="w-full bg-gray-700 text-white p-3 rounded-lg" placeholder="أدخل المبلغ" required />
-          </div>
-          <div>
-            <label class="block text-white font-semibold mb-2">طريقة السحب</label>
-            <select id="withdrawMethod" class="w-full bg-gray-700 text-white p-3 rounded-lg" required>
-              <option value="">اختر طريقة</option>
-              <option value="usdt">🪙 USDT BEP20</option>
-              <option value="novabot">🤖 Nova Bot Balance</option>
-              <option value="stars">⭐ نجوم تليجرام</option>
-            </select>
-          </div>
-          <div id="methodDetails"></div>
-          <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">
-            طلب السحب
-          </button>
+          <input type="number" id="withdrawAmount" min="0.45" step="0.01" class="w-full bg-gray-700 text-white p-3 rounded-lg" placeholder="المبلغ" required />
+          <select id="withdrawMethod" class="w-full bg-gray-700 text-white p-3 rounded-lg" required>
+            <option value="">اختر الطريقة</option>
+            <option value="usdt">🪙 USDT</option>
+            <option value="novabot">🤖 Nova Bot</option>
+            <option value="stars">⭐ النجوم</option>
+          </select>
+          <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">سحب</button>
         </form>
-
-        <!-- Withdrawal History -->
-        <div class="mt-8">
-          <h4 class="text-xl font-bold text-white mb-4">📊 سجل السحب</h4>
-          <div id="withdrawalHistory" class="space-y-3">
-            <div class="bg-gray-700 p-3 rounded-lg text-center text-gray-300">
-              لا توجد عمليات سحب
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 
-  <!-- Floating Action Buttons -->
-  <div class="fixed bottom-6 right-6 space-y-3">
-    <button id="referralBtn" class="bg-purple-600 hover:bg-purple-700 w-14 h-14 rounded-full text-white shadow-lg flex items-center justify-center transition transform hover:scale-110">
-      <i class="fas fa-share-alt text-xl"></i>
-    </button>
-    <button id="settingsBtn" class="bg-blue-600 hover:bg-blue-700 w-14 h-14 rounded-full text-white shadow-lg flex items-center justify-center transition transform hover:scale-110">
-      <i class="fas fa-cog text-xl"></i>
-    </button>
-  </div>
-
-  <!-- Script -->
   <script src="../public/app.js"></script>
 </body>
 </html>
