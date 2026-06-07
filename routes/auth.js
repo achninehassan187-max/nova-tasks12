@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const User = require(path.join(__dirname, '../models/User'));
-const GmailTask = require(path.join(__dirname, '../models/GmailTask'));
-const ShortlinkTask = require(path.join(__dirname, '../models/ShortlinkTask'));
-const SpecialTask = require(path.join(__dirname, '../models/SpecialTask'));
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
